@@ -1,0 +1,141 @@
+<html>
+<!-- Adapted from the people.html UI design -->
+<head>
+	<title>Visitors</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
+
+	function newVisitor() {
+		showform('insert');
+	}
+
+	function browseVisitors() {
+		showform('browse');
+	}
+
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseVisitors()">
+	<h1>Parks</h1> 
+	[ <a href=" {{ url_for('home')}}">Home</a> |<a href=" {{ url_for('parks')}}">Parks</a> | <a href=" {{ url_for('rides')}}">Rides</a> | <a href=" {{ url_for('restaurants')}}">Restaurants</a> | <a href=" {{ url_for('visitors')}}">Visitors</a> | Touring Plans ]
+
+	<div id="browse">
+		<p><a href="#" onClick="newVisitor()">Add New</a> </p>
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    {# <td><a href="edit_park/{{item.parkID}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_park/{{item.parkID}}" class="btn btn-default">Delete</a></td> #}
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+		<!-- form to INSERT new data into Parks-->
+		<form id="insertVisitor" action="/visitors" method="post">
+			<legend><strong>Add Visitor</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="visitorName">Visitor name:</label>
+				<input type="text" class="form-control" id="visitorName" name="visitorName" pattern="[A-Za-z]{1,}" placeholder="" required>
+
+				<label for="height">Height:</label>
+				<input type="text" class="form-control" id="height" name="height" pattern="[A-Za-z0-9]{1,}" placeholder="">
+
+
+				<label for="visitorEmail">Email:</label>
+                <input type="text" class="form-control" id="visitorEmail" name="visitorEmail" pattern="[A-Za-z0-9]{1,}" placeholder="">
+
+            </fieldset>
+
+            <!-- Create 'Add Ride' and 'Cancel' buttons -->
+			<input type="submit" value="Add Visitor" name="Add Visitor" class="btn btn-primary" style="margin:.5rem;">
+			<input class="btn" type="button" value="Cancel" onClick="browseVisitors()"> 
+        </form>
+	</div><!--insert-->
+	{# <div id="edit">
+		<!-- form to edit data in Rides-->
+		<form id="editParks" action="/edit_parks/{{data[0].parkID}}" method="post">
+			<legend><strong>Edit Park</strong></legend>
+			<fieldset>
+				<input type="hidden" value="{{data[0].parkID}}" class="form-control" id="parkID" name="parkID" required>
+				<label for="park_name">Park name:</label>
+
+				<input type="text" class="form-control" id="park_name" name="park_name" pattern="[A-Za-z]{1,}" placeholder="{{data[0].parkName}}" required>
+				<label for="model">Park Hours:</label>
+
+				<input type="text" class="form-control" id="parkHours" name="parkHours" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].parkHours}}">
+
+				<label for="color">Nighttime Show:</label>
+				<input type="text" class="form-control" id="nighttimeShow" name="nighttimeShow" pattern="[0-9]{1,}" placeholder="{{data[0].nighttimeShow}}"> 
+				
+				</fieldset>
+				<input class="btn" type="button" value="Cancel" onClick="browseParks()" style="margin:.5rem;"> 
+        </form>
+	</div> #}
+    <!--edit-->
+</body>
+</html>

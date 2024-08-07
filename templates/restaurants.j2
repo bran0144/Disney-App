@@ -1,7 +1,7 @@
 <html>
 <!-- Adapted from the people.html UI design -->
 <head>
-	<title>People</title>
+	<title>Restaurants</title>
 	<link href="style.css" rel="stylesheet" type="text/css" />
 	<script language="JavaScript">
 	function showform(dowhat) {
@@ -37,19 +37,11 @@
 		}
 	}
 
-	function newPerson() {
+	function newRestaurant() {
 		showform('insert');
 	}
 
-	function updatePerson(pid) {
-		showform('update');
-	}
-
-	function deletePerson(pid) {
-		showform('delete');
-	}
-
-	function browsePeople() {
+	function browseRestaurants() {
 		showform('browse');
 	}
 
@@ -59,10 +51,12 @@
 	</script>
 </head>
 
-<body onload="browsePeople()">
-	<h1>People</h1> [ Planets | <a href="people">People</a> | Certifications | People Certified ]
+<body onload="browseRestaurants()">
+	<h1>Restaurants</h1> 
+	[ <a href=" {{ url_for('main')}}">Home</a> |<a href="{{ url_for('parks')}}">Parks</a> | <a href="{{ url_for('rides')}}">Rides</a> | <a href="{{ url_for('restaurants')}}">Restaurants</a>  | Touring Plans ]
+
 	<div id="browse">
-		<p><a href="#" onClick="newPerson()">Add New</a> </p>
+		<p><a href="#" onClick="newRide()">Add New</a> </p>
 		<table border="1" cellpadding="5">
             <!-- Access data tuple passed from app.py --> 
             {% if data %}
@@ -89,8 +83,8 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    <td><a href="edit_people/{{item.id}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_people/{{item.id}}" class="btn btn-default">Delete</a></td>
+						    {# <td><a href="edit_ride/{{item.rideID}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_ride/{{item.rideID}}" class="btn btn-default">Delete</a></td> #}
 
 					    </tr> 
                         {% endfor %} 
@@ -100,61 +94,44 @@
 	</div>	<!-- browse -->
 
 	<div id="insert">
-		<!-- form to INSERT new data into bsg_people-->
-		<form id="insertPerson" action="/people" method="post">
-			<legend><strong>Add Person</strong></legend>
+		<!-- form to INSERT new data into Restaurants-->
+		<form id="insertRide" action="/restaurants" method="post">
+			<legend><strong>Add Restaurant</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="make">first name:</label>
-				<input type="text" class="form-control" id="fname" name="fname" pattern="[A-Za-z]{1,}" placeholder="" required>
+				<label for="restaurant_name">ride name:</label>
+				<input type="text" class="form-control" id="restaurant_name" name="restaurant_name" pattern="[A-Za-z]{1,}" placeholder="" required>
 
-				<label for="model">last name:</label>
-				<input type="text" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9]{1,}" placeholder="" required>
+				<label for="reservations_accepted">Reservations accepted:</label>
+				<select class="form-control" id="reservations_accepted" name="reservations_accepted" placeholder="">
+					<option value="1">Yes</option>
+					<option value="2">No</option>
+				</select>	
 
-				<label for="year">homeworld:</label>
-				<select class="form-control" id="homeworld" name="homeworld" pattern="[0-4]{1}" placeholder="" required>
+				<label for="park">park:</label>
+				<select class="form-control" id="park" name="park" pattern="[0-4]{1}" placeholder="" required>
 				<!-- these are hard coded, but you can add code to make this dynamic -->
 					<option value="0">&nbsp;</option>
-					<option value="1">Gemenon</option>
-					<option value="2">Leonis</option>
-					<option value="3">Caprica</option>
+					<option value="1">Magic Kingdom</option>
+					<option value="2">Animal Kingdom</option>
+					<option value="3">Epcot</option>
+					<option value="3">Disney's Hollywood Studios</option>
 				</select>
 
-				<label for="color">age:</label>
-				<input type="text" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}" placeholder=""> 
+				<label for="character_dining">Lightning Lane:</label>
+				<select class="form-control" id="character_dining" name="character_dining" placeholder="">
+					<option value="1">Yes</option>
+					<option value="2">No</option>
+				</select>	
+
             </fieldset>
 
-            <!-- Create 'Add Person' and 'Cancel' buttons -->
-			<input type="submit" value="Add Person" name="Add_Person" class="btn btn-primary" style="margin:.5rem;">
-			<input class="btn" type="button" value="Cancel" onClick="browsePeople()"> 
+            <!-- Create 'Add Restaurant' and 'Cancel' buttons -->
+			<input type="submit" value="Add Restaurant" name="Add_Restaurant" class="btn btn-primary" style="margin:.5rem;">
+			<input class="btn" type="button" value="Cancel" onClick="browseRestaurants()"> 
         </form>
 	</div><!--insert-->
-	<div id="edit">
-		<!-- form to edit data in bsg_people-->
-		<form id="editPerson" action="/edit_people/{{data[0].id}}" method="post">
-			<legend><strong>Edit Person</strong></legend>
-			<fieldset>
-				<input type="hidden" value="{{data[0].id}}" class="form-control" id="personID" name="personID" required>
-				<label for="make">first name:</label>
+	
 
-				<input type="text" class="form-control" id="fname" name="fname" pattern="[A-Za-z]{1,}" placeholder="{{data[0].fname}}" required>
-				<label for="model">last name:</label>
-
-				<input type="text" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].lname}}" required>
-				<label for="year">homeworld:</label>
-
-				<select class="form-control" id="homeworld" name="homeworld" pattern="[0-4]{1}" placeholder="" required>
-					<option value="0">&nbsp;</option>
-					<option value="1">Gemenon</option>
-					<option value="2">Leonis</option>
-					<option value="3">Caprica</option>
-					<option value="{{data[0].homeworld}}" selected></option>
-				</select>
-
-				<label for="color">age:</label>
-				<input type="text" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].age}}" required> </fieldset>
-				<input class="btn" type="button" value="Cancel" onClick="browsePeople()" style="margin:.5rem;"> 
-        </form>
-	</div><!--edit-->
 </body>
 </html>
