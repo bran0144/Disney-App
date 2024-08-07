@@ -432,6 +432,77 @@ def visitors():
         # render parks page
         return render_template("visitors.j2", data=data)
 
+# route for rides page
+@app.route("/touring_plans", methods=["POST", "GET"])
+def touring_plans():
+    # Separate out the request methods, in this case this is for a POST
+    # insert a person into the bsg_people entity
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("insertTouringPlan"):
+            # grab user form inputs
+            planName = request.form["planName"]
+            parkID = request.form["parkID"]
+            visitorID = request.form["visitorID"]
+            visitDate = request.form["visitDate"]
+
+
+            # account for null visitDate AND planName
+            if visitDate == "" and planName == "":
+                # mySQL query to insert a new plan into TouringPlans with our form inputs
+                query = "INSERT INTO TouringPlans (parkID, visitorID) VALUES (%s, %s)"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (parkID, visitorID))
+                mysql.connection.commit()
+            
+            # account for null visitDate
+            elif visitDate == "":
+                query = "INSERT INTO TouringPlans (parkID, visitorID, planName) VALUES (%s, %s, %s)"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (parkID, visitorID, planName))
+                mysql.connection.commit()
+
+            # account for null planName
+            elif planName == "":
+                query = "INSERT INTO TouringPlans (parkID, visitorID, visitDate) VALUES (%s, %s, %s)"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (parkID, visitorID, visitDate))
+                mysql.connection.commit()
+
+            # no null inputs
+            else:
+                query = "INSERT INTO TouringPlans (parkID, visitorID, visitDate, planName ) VALUES (%s, %s,%s,%s)"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (parkID, visitorID, visitDate, planName ))
+                mysql.connection.commit()
+
+            # redirect back to rides page
+            return redirect("/touring_plans")
+
+    # Grab Rides data so we send it to our template to display
+    if request.method == "GET":
+        # mySQL query to grab all the rides in Rides
+
+        # TODO: need to fix this query
+        query = "SELECT Rides.rideID, rideName, heightRestriction, lightningLane, rideLength, Parks.parkName AS park FROM Rides LEFT JOIN Parks ON Rides.parkID = Parks.parkID;"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        # mySQL query to grab park id/name data for our dropdown
+        query2 = "SELECT parkID, parkName FROM Parks;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        parks_data = cur.fetchall()
+
+        # mySQL query to grab ride id/name data for our dropdown
+        query3 = "SELECT visitorID, visitorName FROM Visitors;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        visitor_data = cur.fetchall()
+
+        # render edit_rides page passing our query data and parks data to the edit_rides template
+        return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data)
 
 # Listener
 

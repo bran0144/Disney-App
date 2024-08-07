@@ -1,7 +1,9 @@
 <html>
 <!-- Adapted from the people.html UI design -->
+
+{# We may want to think about another design to incorporate the M:N elements #}
 <head>
-	<title>Visitors</title>
+	<title>Touring Plans</title>
 	<link href="style.css" rel="stylesheet" type="text/css" />
 	<script language="JavaScript">
 	function showform(dowhat) {
@@ -37,11 +39,11 @@
 		}
 	}
 
-	function newVisitor() {
+	function newTouringPlan() {
 		showform('insert');
 	}
 
-	function browseVisitors() {
+	function browseTouringPlans() {
 		showform('browse');
 	}
 
@@ -51,12 +53,12 @@
 	</script>
 </head>
 
-<body onload="browseVisitors()">
-	<h1>Parks</h1> 
-	[ <a href=" {{ url_for('home')}}">Home</a> |<a href=" {{ url_for('parks')}}">Parks</a> | <a href=" {{ url_for('rides')}}">Rides</a> | <a href=" {{ url_for('restaurants')}}">Restaurants</a> | <a href=" {{ url_for('visitors')}}">Visitors</a> | Touring Plans ]
+<body onload="browseTouringPlans()">
+	<h1>Touring Plans</h1> 
+	[ <a href=" {{ url_for('main')}}">Home</a> |<a href="{{ url_for('parks')}}">Parks</a> | <a href="{{ url_for('rides')}}">Rides</a> | <a href="{{ url_for('restaurants')}}">Restaurants</a>  | <a href="{{ url_for('touring_plans')}}">Touring Plans</a> ]
 
 	<div id="browse">
-		<p><a href="#" onClick="newVisitor()">Add New</a> </p>
+		<p><a href="#" onClick="newTouringPlan()">Add New</a> </p>
 		<table border="1" cellpadding="5">
             <!-- Access data tuple passed from app.py --> 
             {% if data %}
@@ -82,6 +84,10 @@
 						    <td> {{item[key]}} </td> 
                             {% endfor %}
 
+                            <!-- Create pages for M:N relationships -->
+						    <td><a href="add_rides/{{item.planID}}" class="btn btn-default">Add a Ride</a></td>
+						    <td><a href="add_restaurants/{{item.planID}}" class="btn btn-default">Add a Restaurant</a></td>
+
 					    </tr> 
                         {% endfor %} 
                 {% endif %} 
@@ -90,28 +96,41 @@
 	</div>	<!-- browse -->
 
 	<div id="insert">
-		<!-- form to INSERT new data into Parks-->
-		<form id="insertVisitor" action="/visitors" method="post">
-			<legend><strong>Add Visitor</strong></legend>
+		<!-- form to INSERT new data into Restaurants-->
+		<form id="insertTouringPlan" action="/touring_plans" method="post">
+			<legend><strong>Add Touring Plan</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="visitorName">Visitor name:</label>
-				<input type="text" class="form-control" id="visitorName" name="visitorName" pattern="[A-Za-z]{1,}" placeholder="" required>
+				<label for="planName">Plan name:</label>
+				<input type="text" class="form-control" id="planName" name="planName" pattern="[A-Za-z]{1,}" placeholder="" required>
 
-				<label for="height">Height:</label>
-				<input type="text" class="form-control" id="height" name="height" pattern="[A-Za-z0-9]{1,}" placeholder="">
+				<label for="visitDate">Visit Date:</label>
+                <input type="date" class="form-control" id="visitDate">
 
+				<label for="park">park:</label>
+				<select class="form-control" id="park" name="park" pattern="[0-4]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="0">&nbsp;</option>
+					<option value="1">Magic Kingdom</option>
+					<option value="2">Animal Kingdom</option>
+					<option value="3">Epcot</option>
+					<option value="3">Disney's Hollywood Studios</option>
+				</select>
 
-				<label for="visitorEmail">Email:</label>
-                <input type="text" class="form-control" id="visitorEmail" name="visitorEmail" pattern="[A-Za-z0-9]{1,}" placeholder="">
+				<label for="visitorName">Visitor Name:</label>
+				<select class="form-control" id="visitorName" name="visitorName" placeholder="">
+
+                    {# TODO: need to make this dynamic search for name #}
+				</select>	
 
             </fieldset>
 
-            <!-- Create 'Add Ride' and 'Cancel' buttons -->
+            <!-- Create 'Add Restaurant' and 'Cancel' buttons -->
 			<input type="submit" value="Add Visitor" name="Add Visitor" class="btn btn-primary" style="margin:.5rem;">
 			<input class="btn" type="button" value="Cancel" onClick="browseVisitors()"> 
         </form>
 	</div><!--insert-->
 	
+
 </body>
 </html>
