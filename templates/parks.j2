@@ -53,7 +53,7 @@
 
 <body onload="browseParks()">
 	<h1>Parks</h1> 
-	[ <a href=" {{ url_for('home')}}">Home</a> |<a href=" {{ url_for('parks')}}">Parks</a> | <a href=" {{ url_for('rides')}}">Rides</a> | <a href=" {{ url_for('restaurants')}}">Restaurants</a> | Touring Plans ]
+	[ <a href=" {{ url_for('main')}}">Home</a> |<a href=" {{ url_for('parks')}}">Parks</a> | <a href=" {{ url_for('rides')}}">Rides</a> | <a href=" {{ url_for('restaurants')}}">Restaurants</a> | <a href=" {{ url_for('visitors')}}">Visitors</a> | <a href=" {{ url_for('touring_plans')}}">Touring Plans</a> ]
 
 	<div id="browse">
 		<p><a href="#" onClick="newPark()">Add New</a> </p>
@@ -96,46 +96,25 @@
 	<div id="insert">
 		<!-- form to INSERT new data into Parks-->
 		<form id="insertPark" action="/parks" method="post">
-			<legend><strong>Add Ride</strong></legend>
+			<legend><strong>Add Park</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="parkName">ride name:</label>
+				<label for="parkName">Park name:</label>
 				<input type="text" class="form-control" id="parkName" name="parkName" pattern="[A-Za-z]{1,}" placeholder="" required>
 
 				<label for="parkHours">Park Hours:</label>
 				<input type="text" class="form-control" id="parkHours" name="parkHours" pattern="[A-Za-z0-9]{1,}" placeholder="">
-
 
 				<label for="nighttimeShow">Nighttime Show:</label>
                 <input type="text" class="form-control" id="nighttimeShow" name="nighttimeShow" pattern="[A-Za-z0-9]{1,}" placeholder="">
 
             </fieldset>
 
-            <!-- Create 'Add Ride' and 'Cancel' buttons -->
+            <!-- Create 'Add Park' and 'Cancel' buttons -->
 			<input type="submit" value="Add Park" name="Add Park" class="btn btn-primary" style="margin:.5rem;">
 			<input class="btn" type="button" value="Cancel" onClick="browseParks()"> 
         </form>
 	</div><!--insert-->
-	{# <div id="edit">
-		<!-- form to edit data in Rides-->
-		<form id="editParks" action="/edit_parks/{{data[0].parkID}}" method="post">
-			<legend><strong>Edit Park</strong></legend>
-			<fieldset>
-				<input type="hidden" value="{{data[0].parkID}}" class="form-control" id="parkID" name="parkID" required>
-				<label for="park_name">Park name:</label>
 
-				<input type="text" class="form-control" id="park_name" name="park_name" pattern="[A-Za-z]{1,}" placeholder="{{data[0].parkName}}" required>
-				<label for="model">Park Hours:</label>
-
-				<input type="text" class="form-control" id="parkHours" name="parkHours" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].parkHours}}">
-
-				<label for="color">Nighttime Show:</label>
-				<input type="text" class="form-control" id="nighttimeShow" name="nighttimeShow" pattern="[0-9]{1,}" placeholder="{{data[0].nighttimeShow}}"> 
-				
-				</fieldset>
-				<input class="btn" type="button" value="Cancel" onClick="browseParks()" style="margin:.5rem;"> 
-        </form>
-	</div> #}
-    <!--edit-->
 </body>
 </html>

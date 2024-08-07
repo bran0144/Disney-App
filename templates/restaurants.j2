@@ -53,10 +53,10 @@
 
 <body onload="browseRestaurants()">
 	<h1>Restaurants</h1> 
-	[ <a href=" {{ url_for('main')}}">Home</a> |<a href="{{ url_for('parks')}}">Parks</a> | <a href="{{ url_for('rides')}}">Rides</a> | <a href="{{ url_for('restaurants')}}">Restaurants</a>  | Touring Plans ]
+		[ <a href=" {{ url_for('main')}}">Home</a> |<a href=" {{ url_for('parks')}}">Parks</a> | <a href=" {{ url_for('rides')}}">Rides</a> | <a href=" {{ url_for('restaurants')}}">Restaurants</a> | <a href=" {{ url_for('visitors')}}">Visitors</a> | <a href=" {{ url_for('touring_plans')}}">Touring Plans</a> ]
 
 	<div id="browse">
-		<p><a href="#" onClick="newRide()">Add New</a> </p>
+		<p><a href="#" onClick="newRestaurant()">Add New</a> </p>
 		<table border="1" cellpadding="5">
             <!-- Access data tuple passed from app.py --> 
             {% if data %}
@@ -95,20 +95,20 @@
 
 	<div id="insert">
 		<!-- form to INSERT new data into Restaurants-->
-		<form id="insertRide" action="/restaurants" method="post">
+		<form id="insertRestaurant" action="/restaurants" method="post">
 			<legend><strong>Add Restaurant</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="restaurant_name">ride name:</label>
-				<input type="text" class="form-control" id="restaurant_name" name="restaurant_name" pattern="[A-Za-z]{1,}" placeholder="" required>
+				<label for="restaurantName">Restaurant name:</label>
+				<input type="text" class="form-control" id="restaurantName" name="restaurantName" pattern="[A-Za-z]{1,}" placeholder="" required>
 
-				<label for="reservations_accepted">Reservations accepted:</label>
-				<select class="form-control" id="reservations_accepted" name="reservations_accepted" placeholder="">
+				<label for="reservationsAccepted">Reservations accepted:</label>
+				<select class="form-control" id="reservationsAccepted" name="reservationsAccepted" placeholder="">
 					<option value="1">Yes</option>
 					<option value="2">No</option>
 				</select>	
 
-				<label for="park">park:</label>
+				<label for="park">Park:</label>
 				<select class="form-control" id="park" name="park" pattern="[0-4]{1}" placeholder="" required>
 				<!-- these are hard coded, but you can add code to make this dynamic -->
 					<option value="0">&nbsp;</option>
@@ -118,8 +118,8 @@
 					<option value="3">Disney's Hollywood Studios</option>
 				</select>
 
-				<label for="character_dining">Lightning Lane:</label>
-				<select class="form-control" id="character_dining" name="character_dining" placeholder="">
+				<label for="characterDining">Character Dining:</label>
+				<select class="form-control" id="characterDining" name="characterDining" placeholder="">
 					<option value="1">Yes</option>
 					<option value="2">No</option>
 				</select>	

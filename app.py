@@ -8,9 +8,9 @@ import os
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
-app.config['MYSQL_USER'] = 'cs340_username'
-app.config['MYSQL_PASSWORD'] = 'password' #last 4 of onid
-app.config['MYSQL_DB'] = 'cs340_username'
+app.config['MYSQL_USER'] = 'cs340_gottk'
+app.config['MYSQL_PASSWORD'] = '' #last 4 of onid
+app.config['MYSQL_DB'] = 'cs340_gottk'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
 
@@ -123,7 +123,7 @@ def delete_ride(id):
     # mySQL query to delete the ride with our passed id
     query = "DELETE FROM Rides WHERE rideID = '%s';"
     cur = mysql.connection.cursor()
-    cur.execute(query, (id,))
+    cur.execute(query, (id))
     mysql.connection.commit()
 
     # redirect back to people page
@@ -142,7 +142,7 @@ def edit_ride(id):
         data = cur.fetchall()
 
         # mySQL query to grab park id/name data for our dropdown
-        query2 = "SELECT parkID, parkName FROM Parks"
+        query2 = "SELECT parkID, parkName FROM Parks;"
         cur = mysql.connection.cursor()
         cur.execute(query2)
         parks_data = cur.fetchall()
@@ -336,14 +336,14 @@ def restaurants():
                 mysql.connection.commit()
 
             # account for null reservationsAccepted
-            elif parkID  == "None":
+            elif reservationsAccepted == "None":
                 query = "INSERT INTO Restaurants (restaurantName, parkID, characterDining) VALUES (%s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (restaurantName, parkID, characterDining))
                 mysql.connection.commit()
 
             # account for null characterDining
-            elif parkID  == "None":
+            elif characterDining == "None":
                 query = "INSERT INTO Restaurants (restaurantName, parkID, reservationsAccepted) VALUES (%s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (restaurantName, parkID, reservationsAccepted))
@@ -483,8 +483,7 @@ def touring_plans():
     if request.method == "GET":
         # mySQL query to grab all the rides in Rides
 
-        # TODO: need to fix this query
-        query = "SELECT Rides.rideID, rideName, heightRestriction, lightningLane, rideLength, Parks.parkName AS park FROM Rides LEFT JOIN Parks ON Rides.parkID = Parks.parkID;"
+        query = "SELECT TouringPlans.planID, visitDate, planName, Parks.parkName AS park, Visitors.visitorName AS visitorName FROM TouringPlans LEFT JOIN Parks ON TouringPlans.parkID = Parks.parkID LEFT JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
