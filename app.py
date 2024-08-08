@@ -276,7 +276,7 @@ def parks():
     # Grab Parks data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the parks in Parks
-        query = "SELECT Parks.parkID, parkName, parkHours, nighttimeShow;"
+        query = "SELECT parkID, parkName, parkHours, nighttimeShow FROM Parks;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -424,7 +424,7 @@ def visitors():
     # Grab Visitors data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the visitors in Visitors
-        query = "SELECT Visitors.visitorID, visitorName, height, visitorEmail;"
+        query = "SELECT visitorID, visitorName, height, visitorEmail FROM Visitors;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -450,21 +450,21 @@ def touring_plans():
             # account for null visitDate AND planName
             if visitDate == "" and planName == "":
                 # mySQL query to insert a new plan into TouringPlans with our form inputs
-                query = "INSERT INTO TouringPlans (parkID, visitorID) VALUES (%s, %s)"
+                query = "INSERT INTO TouringPlans (parkID, visitorID) VALUES (%s, %s);"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (parkID, visitorID))
                 mysql.connection.commit()
             
             # account for null visitDate
             elif visitDate == "":
-                query = "INSERT INTO TouringPlans (parkID, visitorID, planName) VALUES (%s, %s, %s)"
+                query = "INSERT INTO TouringPlans (parkID, visitorID, planName) VALUES (%s, %s, %s);"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (parkID, visitorID, planName))
                 mysql.connection.commit()
 
             # account for null planName
             elif planName == "":
-                query = "INSERT INTO TouringPlans (parkID, visitorID, visitDate) VALUES (%s, %s, %s)"
+                query = "INSERT INTO TouringPlans (parkID, visitorID, visitDate) VALUES (%s, %s, %s);"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (parkID, visitorID, visitDate))
                 mysql.connection.commit()
@@ -508,4 +508,4 @@ def touring_plans():
 if __name__ == "__main__":
 
     #Start the app on port 3000, it will be different once hosted
-    app.run(port=9001, debug=True)
+    app.run(port=9008, debug=True)
