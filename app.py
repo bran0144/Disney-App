@@ -39,62 +39,62 @@ def rides():
             lightningLane = request.form["lightningLane"]
             rideLength = request.form["rideLength"]
 
-            # account for null heightRestriction AND lightningLane AND rideLength
-            if heightRestriction == "" and lightningLane == "" and rideLength == "":
-                # mySQL query to insert a new person into bsg_people with our form inputs
-                query = "INSERT INTO Rides (rideName, parkID) VALUES (%s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID))
-                mysql.connection.commit()
+            # # account for null heightRestriction AND lightningLane AND rideLength
+            # if heightRestriction == "" and lightningLane == "" and rideLength == "":
+            #     # mySQL query to insert a new person into bsg_people with our form inputs
+            #     query = "INSERT INTO Rides (rideName, parkID) VALUES (%s, %s)"
+            #     cur = mysql.connection.cursor()
+            #     cur.execute(query, (rideName, parkID))
+            #     mysql.connection.commit()
             
-            # account for null heightRestriction and null lightningLane
-            elif heightRestriction == "" and lightningLane == "":
-                query = "INSERT INTO Rides (rideName, parkID, rideLength) VALUES (%s, %s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, rideLength))
-                mysql.connection.commit()
+            # # account for null heightRestriction and null lightningLane
+            # elif heightRestriction == "" and lightningLane == "":
+            #     query = "INSERT INTO Rides (rideName, parkID, rideLength) VALUES (%s, %s, %s)"
+            #     cur = mysql.connection.cursor()
+            #     cur.execute(query, (rideName, parkID, rideLength))
+            #     mysql.connection.commit()
 
-            # account for null heightRestriction and null rideLength
-            elif heightRestriction == "" and rideLength == "":
-                query = "INSERT INTO Rides (rideName, parkID, lightningLane) VALUES (%s, %s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, lightningLane))
-                mysql.connection.commit()
+            # # account for null heightRestriction and null rideLength
+            # elif heightRestriction == "" and rideLength == "":
+            #     query = "INSERT INTO Rides (rideName, parkID, lightningLane) VALUES (%s, %s, %s)"
+            #     cur = mysql.connection.cursor()
+            #     cur.execute(query, (rideName, parkID, lightningLane))
+            #     mysql.connection.commit()
 
-            # account for null lightningLane and null rideLength
-            elif lightningLane == "" and rideLength == "":
-                query = "INSERT INTO Rides (rideName, parkID, heightRestriction) VALUES (%s, %s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, heightRestriction))
-                mysql.connection.commit()
+            # # account for null lightningLane and null rideLength
+            # elif lightningLane == "" and rideLength == "":
+            #     query = "INSERT INTO Rides (rideName, parkID, heightRestriction) VALUES (%s, %s, %s)"
+            #     cur = mysql.connection.cursor()
+            #     cur.execute(query, (rideName, parkID, heightRestriction))
+            #     mysql.connection.commit()
 
-            # account for null heightRestriction
-            elif heightRestriction == "":
-                query = "INSERT INTO Rides (rideName, parkID, lightningLane, rideLength) VALUES (%s, %s, %s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, lightningLane, rideLength))
-                mysql.connection.commit()
+            # # account for null heightRestriction
+            # elif heightRestriction == "":
+            #     query = "INSERT INTO Rides (rideName, parkID, lightningLane, rideLength) VALUES (%s, %s, %s, %s)"
+            #     cur = mysql.connection.cursor()
+            #     cur.execute(query, (rideName, parkID, lightningLane, rideLength))
+            #     mysql.connection.commit()
 
-            # account for null lightningLane
-            elif lightningLane == "":
-                query = "INSERT INTO Rides (rideName, parkID, heightRestriction, rideLength) VALUES (%s, %s, %s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, heightRestriction, rideLength))
-                mysql.connection.commit()
+            # # account for null lightningLane
+            # elif lightningLane == "":
+            #     query = "INSERT INTO Rides (rideName, parkID, heightRestriction, rideLength) VALUES (%s, %s, %s, %s)"
+            #     cur = mysql.connection.cursor()
+            #     cur.execute(query, (rideName, parkID, heightRestriction, rideLength))
+            #     mysql.connection.commit()
 
-            # account for null rideLength
-            elif rideLength == "":
-                query = "INSERT INTO Rides (rideName, parkID, heightRestriction, lightningLane) VALUES (%s, %s, %s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, heightRestriction, lightningLane))
-                mysql.connection.commit()
+            # # account for null rideLength
+            # elif rideLength == "":
+            #     query = "INSERT INTO Rides (rideName, parkID, heightRestriction, lightningLane) VALUES (%s, %s, %s, %s)"
+            #     cur = mysql.connection.cursor()
+            #     cur.execute(query, (rideName, parkID, heightRestriction, lightningLane))
+            #     mysql.connection.commit()
 
-            # no null inputs
-            else:
-                query = "INSERT INTO Rides (rideName, parkID, heightRestriction, lightningLane, rideLength) VALUES (%s, %s,%s,%s, %s)"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, heightRestriction, lightningLane, rideLength))
-                mysql.connection.commit()
+            # # no null inputs
+            # else:
+            query = "INSERT INTO Rides (rideName, parkID, heightRestriction, lightningLane, rideLength) VALUES (%s, %s, %s, %s, %s)"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (rideName, parkID, heightRestriction, lightningLane, rideLength))
+            mysql.connection.commit()
 
             # redirect back to rides page
             return redirect("/rides")
@@ -118,12 +118,12 @@ def rides():
 
 # route for delete functionality, deleting a ride from Rides,
 # we want to pass the 'id' value of that ride on button click (see HTML) via the route
-@app.route("/delete_ride/<int:id>")
-def delete_ride(id):
+@app.route("/delete_ride/<int:rideID>")
+def delete_ride(rideID):
     # mySQL query to delete the ride with our passed id
     query = "DELETE FROM Rides WHERE rideID = '%s';"
     cur = mysql.connection.cursor()
-    cur.execute(query, (id))
+    cur.execute(query, (rideID))
     mysql.connection.commit()
 
     # redirect back to people page
@@ -132,11 +132,11 @@ def delete_ride(id):
 
 # route for edit functionality, updating the attributes of a ride in Rides
 # similar to our delete route, we want to the pass the 'id' value of that ride on button click (see HTML) via the route
-@app.route("/edit_ride/<int:id>", methods=["POST", "GET"])
-def edit_ride(id):
+@app.route("/edit_ride/<int:rideID>", methods=["POST", "GET"])
+def edit_ride(rideID):
     if request.method == "GET":
         # mySQL query to grab the info of the person with our passed id
-        query = "SELECT * FROM Rides WHERE rideID = %s" % (id)
+        query = "SELECT * FROM Rides WHERE rideID = %s" % (rideID)
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()

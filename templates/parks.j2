@@ -100,18 +100,18 @@
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
 				<label for="parkName">Park name:</label>
-				<input type="text" class="form-control" id="parkName" name="parkName" pattern="[A-Za-z]{1,}" placeholder="" required>
+				<input type="text" id="parkName" name="parkName" pattern="[A-Za-z]{1,}" placeholder="" required>
 
 				<label for="parkHours">Park Hours:</label>
-				<input type="text" class="form-control" id="parkHours" name="parkHours" pattern="[A-Za-z0-9]{1,}" placeholder="">
+				<input type="text"  id="parkHours" name="parkHours" pattern="[A-Za-z0-9]{1,}" placeholder="">
 
 				<label for="nighttimeShow">Nighttime Show:</label>
-                <input type="text" class="form-control" id="nighttimeShow" name="nighttimeShow" pattern="[A-Za-z0-9]{1,}" placeholder="">
+                <input type="text"  id="nighttimeShow" name="nighttimeShow" pattern="[A-Za-z0-9]{1,}" placeholder="">
 
             </fieldset>
 
             <!-- Create 'Add Park' and 'Cancel' buttons -->
-			<input type="submit" value="insertPark" name="insertPark" class="btn btn-primary" style="margin:.5rem;">
+			<input id="insertPark" type="submit" value="insertPark" name="insertPark" class="btn btn-primary" style="margin:.5rem;">
 			<input class="btn" type="button" value="Cancel" onClick="browseParks()"> 
         </form>
 	</div><!--insert-->
