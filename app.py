@@ -102,7 +102,7 @@ def rides():
     # Grab Rides data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab all the rides in Rides
-        query = "SELECT Rides.rideID, rideName, heightRestriction, lightningLane, rideLength, Parks.parkName AS park FROM Rides LEFT JOIN Parks ON Rides.parkID = Parks.parkID;"
+        query = "SELECT rideID, rideName, heightRestriction, lightningLane, rideLength, Parks.parkName AS park FROM Rides LEFT JOIN Parks ON Rides.parkID = Parks.parkID;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -153,7 +153,7 @@ def edit_ride(id):
     # meat and potatoes of our update functionality
     if request.method == "POST":
         # fire off if user clicks the 'Edit Ride' button
-        if request.form.get("edit_ride"):
+        if request.form.get("editRides"):
             # grab user form inputs
             rideID = request.form["rideID"]
             rideName = request.form["rideName"]
@@ -300,7 +300,7 @@ def restaurants():
             characterDining = request.form["characterDining"]
 
             # account for null parkID AND reservationsAccepted AND characterDining
-            if parkID  == "None" and reservationsAccepted == "" and characterDining== "":
+            if parkID  == "" and reservationsAccepted == "" and characterDining== "":
                 # mySQL query to insert a new restaurant into Restaurants with our form inputs
                 query = "INSERT INTO Restaurants (restaurantName) VALUES (%s)"
                 cur = mysql.connection.cursor()
@@ -315,35 +315,35 @@ def restaurants():
                 mysql.connection.commit()
 
             # account for null parkID AND reservationsAccepted
-            elif parkID  == "None" and reservationsAccepted == "":
+            elif parkID  == "" and reservationsAccepted == "":
                 query = "INSERT INTO Restaurants (restaurantName, characterDining) VALUES (%s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (restaurantName, characterDining))
                 mysql.connection.commit()
 
             # account for null parkID AND characterDining
-            elif parkID  == "None" and characterDining == "":
+            elif parkID  == "" and characterDining == "":
                 query = "INSERT INTO Restaurants (restaurantName, reservationsAccepted) VALUES (%s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (restaurantName, reservationsAccepted))
                 mysql.connection.commit()
             
             # account for null parkID
-            elif parkID  == "None":
+            elif parkID  == "":
                 query = "INSERT INTO Restaurants (restaurantName, reservationsAccepted, characterDining) VALUES (%s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (restaurantName, reservationsAccepted, characterDining))
                 mysql.connection.commit()
 
             # account for null reservationsAccepted
-            elif reservationsAccepted == "None":
+            elif reservationsAccepted == "":
                 query = "INSERT INTO Restaurants (restaurantName, parkID, characterDining) VALUES (%s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (restaurantName, parkID, characterDining))
                 mysql.connection.commit()
 
             # account for null characterDining
-            elif characterDining == "None":
+            elif characterDining == "":
                 query = "INSERT INTO Restaurants (restaurantName, parkID, reservationsAccepted) VALUES (%s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (restaurantName, parkID, reservationsAccepted))
@@ -362,7 +362,7 @@ def restaurants():
     # Grab Parks data so we send it to our template to display
     if request.method == "GET":
          # mySQL query to grab all the rides in Rides
-        query = "SELECT Restaurants.restaurantID, restaurantName, reservationsAccepted, characterDining, Parks.parkName AS park FROM Restaurants LEFT JOIN Parks ON Restaurants.parkID = Parks.parkID;"
+        query = "SELECT Restaraunts.restaurantID, restaurantName, reservationsAccepted, characterDining, Parks.parkName AS park FROM Restaurants LEFT JOIN Parks ON Restaurants.parkID = Parks.parkID;"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()

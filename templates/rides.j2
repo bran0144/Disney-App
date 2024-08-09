@@ -107,11 +107,11 @@
 			<legend><strong>Add Ride</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="ride_name">ride name:</label>
-				<input type="text" class="form-control" id="ride_name" name="ride_name" pattern="[A-Za-z]{1,}" placeholder="" required>
+				<label for="rideName">ride name:</label>
+				<input type="text" class="form-control" id="rideName" name="rideName" pattern="[A-Za-z]{1,}" placeholder="" required>
 
-				<label for="height_restriction">height restriction:</label>
-				<input type="text" class="form-control" id="height_restriction" name="height_restriction" pattern="[A-Za-z0-9]{1,}" placeholder="">
+				<label for="heightRestriction">height restriction:</label>
+				<input type="text" class="form-control" id="heightRestriction" name="heightRestriction" pattern="[A-Za-z0-9]{1,}" placeholder="">
 
 				<label for="parks">park:</label>
 				<select class="form-control" id="parks" name="parks" pattern="[0-4]{1}" placeholder="" required>
@@ -123,18 +123,18 @@
 					<option value="3">Disney's Hollywood Studios</option>
 				</select>
 
-				<label for="lightning_lane">Lightning Lane:</label>
-				<select class="form-control" id="lightning_lane" name="lightning_lane" placeholder="">
+				<label for="lightningLane">Lightning Lane:</label>
+				<select class="form-control" id="lightningLane" name="lightningLane" placeholder="">
 					<option value="1">Yes</option>
 					<option value="2">No</option>
 				</select>	
 
-				<label for="ride_legnth">Ride Length:</label>
-				<input type="text" class="form-control" id="ride_legnth" name="ride_legnth" placeholder=""> 
+				<label for="rideLength">Ride Length:</label>
+				<input type="text" class="form-control" id="rideLength" name="rideLength" placeholder=""> 
             </fieldset>
 
             <!-- Create 'Add Ride' and 'Cancel' buttons -->
-			<input type="submit" value="Add Ride" name="Add_Ride" class="btn btn-primary" style="margin:.5rem;">
+			<input type="submit" value="insertRide" name="insertRide" class="btn btn-primary" style="margin:.5rem;">
 			<input class="btn" type="button" value="Cancel" onClick="browseRides()"> 
         </form>
 	</div><!--insert-->
@@ -144,13 +144,13 @@
 			<legend><strong>Edit Ride</strong></legend>
 			<fieldset>
 				<input type="hidden" value="{{data[0].rideID}}" class="form-control" id="rideID" name="rideID" required>
-				<label for="make">ride name:</label>
+				<label for="rideName">Ride name:</label>
 
-				<input type="text" class="form-control" id="ride_name" name="ride_name" pattern="[A-Za-z]{1,}" placeholder="{{data[0].ride_name}}" required>
-				<label for="model">height restriction:</label>
+				<input type="text" class="form-control" id="rideName" name="rideName" pattern="[A-Za-z]{1,}" placeholder="{{data[0].rideName}}" required>
+				<label for="heightRestriction">Height restriction:</label>
 
-				<input type="text" class="form-control" id="height_restriction" name="height_restriction" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].height_restriction}}">
-				<label for="year">park:</label>
+				<input type="text" class="form-control" id="heightRestriction" name="heightRestriction" pattern="[A-Za-z0-9]{1,}" placeholder="{{data[0].heightRestriction}}">
+				<label for="parkID">Park:</label>
 
 				<select class="form-control" id="parkID" name="parkID" pattern="[0-4]{1}" placeholder="" required>
 					<option value="0">&nbsp;</option>
@@ -158,14 +158,14 @@
 					<option value="2">Animal Kingdom</option>
 					<option value="3">Epcot</option>
 					<option value="4">Disney's Hollywood Studios</option>
-					<option value="{{data[0].park}}" selected></option>
+					<option value="{{data[0].parkID}}" selected></option>
 				</select>
 
-				<label for="color">lightning lane:</label>
-				<input type="text" class="form-control" id="lightning_lane" name="lightning_lane" pattern="[0-9]{1,}" placeholder="{{data[0].lightning_lane}}"> 
+				<label for="lightningLane">Lightning lane:</label>
+				<input type="text" class="form-control" id="lightningLane" name="lightningLane" pattern="[0-9]{1,}" placeholder="{{data[0].lightningLane}}"> 
 				
-				<label for="color">ride length:</label>
-				<input type="text" class="form-control" id="ride_length" name="ride_length" pattern="[0-9]{1,}" placeholder="{{data[0].ride_length}}"> 
+				<label for="rideLength">Ride length:</label>
+				<input type="text" class="form-control" id="rideLength" name="rideLength" pattern="[0-9]{1,}" placeholder="{{data[0].rideLength}}"> 
 				
 				</fieldset>
 				<input class="btn" type="button" value="Cancel" onClick="browseRides()" style="margin:.5rem;"> 
