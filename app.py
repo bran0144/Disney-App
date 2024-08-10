@@ -1,7 +1,15 @@
-from flask import Flask, render_template, json, redirect
+from flask import Flask, render_template, redirect
 from flask_mysqldb import MySQL
 from flask import request
-import os
+
+
+# Our app.py code borrowed significantly from the flask starter app code
+# https://github.com/osu-cs340-ecampus/flask-starter-app
+
+# We updated the code to match our columns and added routes for out M:N relationships
+# between Touring Plans and Restaurants and Touring Plans and Rides.  
+
+
 
 # Configuration
 
@@ -9,7 +17,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_gottk'
-app.config['MYSQL_PASSWORD'] = '6459' #last 4 of onid
+app.config['MYSQL_PASSWORD'] = '' #last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_gottk'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
@@ -132,11 +140,11 @@ def delete_ride(rideID):
 
 # route for edit functionality, updating the attributes of a ride in Rides
 # similar to our delete route, we want to the pass the 'id' value of that ride on button click (see HTML) via the route
-@app.route("/edit_rides/<int:id>", methods=["POST", "GET"])
-def edit_rides(id):
+@app.route("/edit_rides/<int:rideID>", methods=["POST", "GET"])
+def edit_rides(rideID):
     if request.method == "GET":
         # mySQL query to grab the info of the person with our passed id
-        query = "SELECT * FROM Rides WHERE rideID = %s" % (id)
+        query = "SELECT * FROM Rides WHERE rideID = %s" % (rideID)
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -502,6 +510,57 @@ def touring_plans():
 
         # render edit_rides page passing our query data and parks data to the edit_rides template
         return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data)
+
+@app.route("/touring_plans_restaurants<int:rideID>", methods=["POST", "GET"])
+def touring_plans_restaurant(rideID):
+    
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("insertTouringPlanRestaurant"):
+            # grab user form inputs
+            planID = request.form["planID"]
+            restaurantID = request.form["restaurantID"]
+
+            # no null inputs
+
+            query = "INSERT INTO TouringPlansHasRestaurants (planID, restaurantID ) VALUES (%s, %s)"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (planID, restaurantID ))
+            mysql.connection.commit()
+
+            # redirect back to rides page
+            return redirect("/touring_plans")
+
+    # Grab Rides data so we send it to our template to display
+    if request.method == "GET":
+        # mySQL query to grab a Single Touring Plan
+
+        query = "SELECT visitDate, planName, Parks.parkName AS park, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE rideID = %s" % (rideID)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        # mySQL query to grab park id/name data for our dropdown
+        query2 = "SELECT parkID, parkName FROM Parks;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        parks_data = cur.fetchall()
+
+        # mySQL query to grab visitor id/name data for our dropdown
+        query3 = "SELECT visitorID, visitorName FROM Visitors;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        visitor_data = cur.fetchall()
+
+        # mySQL query to grab ride id/name data for our dropdown
+        query3 = "SELECT restaurantID, restaurantName FROM Restaurants;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        restaurant_data = cur.fetchall()
+
+        # render edit_rides page passing our query data and parks data to the edit_rides template
+        return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data)
+
 
 # Listener
 
