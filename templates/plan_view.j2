@@ -9,6 +9,9 @@
 		showform('browse');
 	}
 
+	function newPlanRestaurant() {
+		showform('insert');
+	}
 	</script>
 </head>
 
@@ -50,8 +53,59 @@
                 {% endif %} 
         </table>   
 	<p>&nbsp;</p>
+
+			<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if restaurant_plans %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in restaurant_plans[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in restaurant_plans %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+           
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
 	</div>	<!-- browse -->
 	
+
+	<div id="insert">
+		<!-- form to INSERT new data into TouringPlansRestaurants-->
+		<form id="insertTouringPlanRestaurant" action="/touring_plan_restaurants/{{restaurant_plans[0].planID}}" method="post">
+			<legend><strong>Add Restaurant</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="restaurantName">Restaurant name:</label>
+				<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="" required>
+
+
+            </fieldset>
+
+            <!-- Create 'Add Restaurant' and 'Cancel' buttons -->
+			<input type="submit" value="insertRestaurant" name="insertRestaurant" class="btn btn-primary" style="margin:.5rem;">
+			<input class="btn" type="button" value="Cancel" onClick="viewTouringPlan()"> 
+        </form>
+	</div><!--insert-->
 
 </body>
 </html>

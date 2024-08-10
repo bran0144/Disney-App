@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_gottk'
-app.config['MYSQL_PASSWORD'] = '' #last 4 of onid
+app.config['MYSQL_PASSWORD'] = '6459' #last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_gottk'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
@@ -47,58 +47,7 @@ def rides():
             lightningLane = request.form["lightningLane"]
             rideLength = request.form["rideLength"]
 
-            # account for null heightRestriction AND lightningLane AND rideLength
-            # if heightRestriction == "" and lightningLane == "" and rideLength == "":
-            #     # mySQL query to insert a new person into bsg_people with our form inputs
-            #     query = "INSERT INTO Rides (rideName, parkID) VALUES (%s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (rideName, parkID))
-            #     mysql.connection.commit()
-            
-            # account for null heightRestriction and null lightningLane
-            # elif heightRestriction == "" and lightningLane == "":
-            #     query = "INSERT INTO Rides (rideName, parkID, rideLength) VALUES (%s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (rideName, parkID, rideLength))
-            #     mysql.connection.commit()
-
-            # account for null heightRestriction and null rideLength
-            # elif heightRestriction == "" and rideLength == "":
-            #     query = "INSERT INTO Rides (rideName, parkID, lightningLane) VALUES (%s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (rideName, parkID, lightningLane))
-            #     mysql.connection.commit()
-
-            # account for null lightningLane and null rideLength
-            # elif lightningLane == "" and rideLength == "":
-            #     query = "INSERT INTO Rides (rideName, parkID, heightRestriction) VALUES (%s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (rideName, parkID, heightRestriction))
-            #     mysql.connection.commit()
-
-            # account for null heightRestriction
-            # elif heightRestriction == "":
-            #     query = "INSERT INTO Rides (rideName, parkID, lightningLane, rideLength) VALUES (%s, %s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (rideName, parkID, lightningLane, rideLength))
-            #     mysql.connection.commit()
-
-            # account for null lightningLane
-            # elif lightningLane == "":
-            #     query = "INSERT INTO Rides (rideName, parkID, heightRestriction, rideLength) VALUES (%s, %s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (rideName, parkID, heightRestriction, rideLength))
-            #     mysql.connection.commit()
-
-            # account for null rideLength
-            # elif rideLength == "":
-            #     query = "INSERT INTO Rides (rideName, parkID, heightRestriction, lightningLane) VALUES (%s, %s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (rideName, parkID, heightRestriction, lightningLane))
-            #     mysql.connection.commit()
-
-            # no null inputs
-            # else:
+          
             query = "INSERT INTO Rides (rideName, parkID, heightRestriction, lightningLane, rideLength) VALUES (%s, %s,%s,%s, %s)"
             cur = mysql.connection.cursor()
             cur.execute(query, (rideName, parkID, heightRestriction, lightningLane, rideLength))
@@ -144,9 +93,9 @@ def delete_ride(rideID):
 def edit_rides(rideID):
     if request.method == "GET":
         # mySQL query to grab the info of the person with our passed id
-        query = "SELECT * FROM Rides WHERE rideID = %s" % (rideID)
+        query = "SELECT * FROM Rides WHERE rideID = %s"
         cur = mysql.connection.cursor()
-        cur.execute(query)
+        cur.execute(query, (rideID,))
         data = cur.fetchall()
 
         # mySQL query to grab park id/name data for our dropdown
@@ -170,68 +119,11 @@ def edit_rides(rideID):
             parkID = request.form["parkID"]
             rideLength = request.form["rideLength"]
 
-            # account for null heightRestriction AND lightningLane AND rideLength
-            if heightRestriction == "" and lightningLane == "" and rideLength == "":
-                # mySQL query to update the attributes of ride with our passed id value
-                query = "UPDATE Rides SET Rides.rideName = %s, Rides.parkID = %s, Rides.heightRestriction = NULL, Rides.lightningLane = NULL, Rides.rideLength = NULL WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, rideID))
-                mysql.connection.commit()
-
-            # account for null heightRestriction AND lightningLane
-            elif heightRestriction == "" and lightningLane == "":
-                # mySQL query to update the attributes of ride with our passed id value
-                query = "UPDATE Rides SET Rides.rideName = %s, Rides.parkID = %s, Rides.rideLength = %s, Rides.heightRestriction = NULL, Rides.lightningLane = NULL WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, rideLength, rideID))
-                mysql.connection.commit()
-
-            # account for null heightRestriction AND rideLength
-            elif heightRestriction == "" and rideLength == "":
-                # mySQL query to update the attributes of ride with our passed id value
-                query = "UPDATE Rides SET Rides.rideName = %s, Rides.parkID = %s, Rides.lightningLane = %s, Rides.heightRestriction = NULL, Rides.rideLength = NULL WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, lightningLane, rideID))
-                mysql.connection.commit()
-
-            # account for null rideLength AND lightningLane
-            elif lightningLane == "" and rideLength == "":
-                # mySQL query to update the attributes of ride with our passed id value
-                query = "UPDATE Rides SET Rides.rideName = %s, Rides.parkID = %s, Rides.heightRestriction = %s, Rides.lightningLane = NULL, Rides.rideLength = NULL WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, heightRestriction, rideID))
-                mysql.connection.commit()
-            
-            # account for null lightningLane
-            elif lightningLane == "" :
-                # mySQL query to update the attributes of ride with our passed id value
-                query = "UPDATE Rides SET Rides.rideName = %s, Rides.parkID = %s, Rides.heightRestriction = %s, Rides.rideLength = %s, Rides.lightningLane = NULL WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, heightRestriction, rideLength, rideID))
-                mysql.connection.commit()
-
-            # account for null heightRestriction
-            elif heightRestriction == "" :
-                # mySQL query to update the attributes of ride with our passed id value
-                query = "UPDATE Rides SET Rides.rideName = %s, Rides.parkID = %s, Rides.lightningLane = %s, Rides.rideLength = %s, Rides.heightRestriction = NULL WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, lightningLane, rideLength, rideID))
-                mysql.connection.commit()
-
-            # account for null rideLength
-            elif rideLength == "" :
-                # mySQL query to update the attributes of ride with our passed id value
-                query = "UPDATE Rides SET Rides.rideName = %s, Rides.parkID = %s, Rides.lightningLane = %s, Rides.heightRestriction = %s, Rides.rideLength = NULL WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, lightningLane, heightRestriction, rideID))
-                mysql.connection.commit()
-
-            # no null inputs
-            else:
-                query = "UPDATE Rides SET Rides.rideName= %s, Rides.parkID = %s, Rides.lightningLane = %s, Rides.heightRestriction = %s Rides.rideLength = %s WHERE Rides.rideID = %s"
-                cur = mysql.connection.cursor()
-                cur.execute(query, (rideName, parkID, lightningLane, heightRestriction, rideLength, rideID))
-                mysql.connection.commit()
+     
+            query = "UPDATE Rides SET rideName= %s, parkID = %s, lightningLane = %s, heightRestriction = %s rideLength = %s WHERE rideID = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (rideName, parkID, lightningLane, heightRestriction, rideLength, rideID))
+            mysql.connection.commit()
 
             # redirect back to rides page after we execute the update query
             return redirect("/rides")
@@ -249,30 +141,6 @@ def parks():
             parkHours = request.form["parkHours"]
             nighttimeShow = request.form["nighttimeShow"]
 
-            # account for null parkHours AND nighttimeShow
-            # if parkHours  == "" and nighttimeShow == "":
-            #     # mySQL query to insert a new person into bsg_people with our form inputs
-            #     query = "INSERT INTO Parks (parkName) VALUES (%s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (parkName))
-            #     mysql.connection.commit()
-            
-            # account for null parkHours
-            # elif parkHours == "":
-            #     query = "INSERT INTO Parks (parkName, nighttimeShow) VALUES (%s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (parkName, nighttimeShow))
-            #     mysql.connection.commit()
-
-            # account for null nighttimeShow
-            # elif nighttimeShow == "":
-            #     query = "INSERT INTO Parks (parkName, parkHours) VALUES (%s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (parkName, parkHours))
-            #     mysql.connection.commit()
-
-            # no null inputs
-            # else:
             query = "INSERT INTO Parks (parkName, parkHours, nighttimeShow) VALUES (%s, %s, %s);"
             cur = mysql.connection.cursor()
             cur.execute(query, (parkName, parkHours, nighttimeShow))
@@ -307,58 +175,6 @@ def restaurants():
             reservationsAccepted = request.form["reservationsAccepted"]
             characterDining = request.form["characterDining"]
 
-            # account for null parkID AND reservationsAccepted AND characterDining
-            # if parkID  == "" and reservationsAccepted == "" and characterDining== "":
-            #     # mySQL query to insert a new restaurant into Restaurants with our form inputs
-            #     query = "INSERT INTO Restaurants (restaurantName) VALUES (%s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (restaurantName))
-            #     mysql.connection.commit()
-            
-            # account for null reservationsAccepted AND characterDining
-            # elif reservationsAccepted == "" and characterDining == "":
-            #     query = "INSERT INTO Restaurants (restaurantName, parkID) VALUES (%s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (restaurantName, parkID))
-            #     mysql.connection.commit()
-
-            # account for null parkID AND reservationsAccepted
-            # elif parkID  == "" and reservationsAccepted == "":
-            #     query = "INSERT INTO Restaurants (restaurantName, characterDining) VALUES (%s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (restaurantName, characterDining))
-            #     mysql.connection.commit()
-
-            # account for null parkID AND characterDining
-            # elif parkID  == "" and characterDining == "":
-            #     query = "INSERT INTO Restaurants (restaurantName, reservationsAccepted) VALUES (%s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (restaurantName, reservationsAccepted))
-            #     mysql.connection.commit()
-            
-            # account for null parkID
-            # elif parkID  == "":
-            #     query = "INSERT INTO Restaurants (restaurantName, reservationsAccepted, characterDining) VALUES (%s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (restaurantName, reservationsAccepted, characterDining))
-            #     mysql.connection.commit()
-
-            # account for null reservationsAccepted
-            # elif reservationsAccepted == "":
-            #     query = "INSERT INTO Restaurants (restaurantName, parkID, characterDining) VALUES (%s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (restaurantName, parkID, characterDining))
-            #     mysql.connection.commit()
-
-            # account for null characterDining
-            # elif characterDining == "":
-            #     query = "INSERT INTO Restaurants (restaurantName, parkID, reservationsAccepted) VALUES (%s, %s, %s)"
-            #     cur = mysql.connection.cursor()
-            #     cur.execute(query, (restaurantName, parkID, reservationsAccepted))
-            #     mysql.connection.commit()
-
-            # no null inputs
-            # else:
             query = "INSERT INTO Restaurants (restaurantName, parkID, reservationsAccepted, characterDining) VALUES (%s, %s, %s, %s)"
             cur = mysql.connection.cursor()
             cur.execute(query, (restaurantName, parkID, reservationsAccepted, characterDining))
@@ -383,6 +199,48 @@ def restaurants():
 
         # render edit_rides page passing our query data and parks data to the edit_rides template
         return render_template("restaurants.j2", data=data, parks=parks_data)
+
+
+# route for edit functionality, updating the attributes of a ride in Rides
+# similar to our delete route, we want to the pass the 'id' value of that ride on button click (see HTML) via the route
+@app.route("/edit_restaurants/<int:restaurantID>", methods=["POST", "GET"])
+def edit_restaurants(restaurantID):
+    if request.method == "GET":
+        # mySQL query to grab the info of the person with our passed id
+        query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        # mySQL query to grab park id/name data for our dropdown
+        query2 = "SELECT parkID, parkName FROM Parks;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        parks_data = cur.fetchall()
+
+        # render edit_rides page passing our query data and parks data to the edit_ride template
+        return render_template("edit_restaurants.j2", data=data, parks=parks_data)
+
+    # meat and potatoes of our update functionality
+    if request.method == "POST":
+        # fire off if user clicks the 'Edit Ride' button
+        if request.form.get("edit_restaurants"):
+            # grab user form inputs
+            restaurantID = request.form["restaurantID"]
+            restaurantName = request.form["restaurantName"]
+            characterDining = request.form["characterDining"]
+            reservationsAccepted = request.form["reservationsAccepted"]
+            parkID = request.form["parkID"]
+            
+
+            query = "UPDATE Restaurants SET Restaurants.restaurantName = %s, Restaurants.parkID = %s, Restaurants.characterDining = %s, Restaurants.reservationsAccepted = %s WHERE Restaurants.restaurantID = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (restaurantName, parkID, characterDining, reservationsAccepted, restaurantID))
+            mysql.connection.commit()
+
+            # redirect back to rides page after we execute the update query
+            return redirect("/restaurants")
+
 
 # route for parks page
 @app.route("/visitors", methods=["POST", "GET"])
@@ -511,8 +369,8 @@ def touring_plans():
         # render edit_rides page passing our query data and parks data to the edit_rides template
         return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data)
 
-@app.route("/touring_plans_restaurants<int:planID>", methods=["POST", "GET"])
-def touring_plans_restaurant(planID):
+@app.route("/touring_plan_restaurants/<int:planID>", methods=["POST", "GET"])
+def touring_plan_restaurants(planID):
     
     if request.method == "POST":
         # fire off if user presses the Add Person button
@@ -523,7 +381,7 @@ def touring_plans_restaurant(planID):
 
             # no null inputs
 
-            query = "INSERT INTO TouringPlansHasRestaurants (planID, restaurantID ) VALUES (%s, %s)"
+            query = "INSERT INTO TouringPlansHasRestaurants (TouringPlansplanID, RestaurantsrestaurantID ) VALUES (%s, %s)"
             cur = mysql.connection.cursor()
             cur.execute(query, (planID, restaurantID ))
             mysql.connection.commit()
@@ -553,22 +411,39 @@ def touring_plans_restaurant(planID):
         visitor_data = cur.fetchall()
 
         # mySQL query to grab ride id/name data for our dropdown
-        query3 = "SELECT restaurantID, restaurantName FROM Restaurants;"
+        query4 = "SELECT restaurantID, restaurantName FROM Restaurants;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
         restaurant_data = cur.fetchall()
 
         # render edit_rides page passing our query data and parks data to the edit_rides template
-        return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data)
+        return render_template("touring_plan_restaurants.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data)
 
+@app.route("/touring_plan_rides/<int:planID>", methods=["POST", "GET"])
+def touring_plan_rides(planID):
+    
+    if request.method == "POST":
+        # fire off if user presses the Add Person button
+        if request.form.get("insertTouringPlanRide"):
+            # grab user form inputs
+            planID = request.form["planID"]
+            rideID = request.form["rideID"]
 
-@app.route("/plan_view<int:planID>", methods=["GET"])
-def plan_view(planID):
-     # Grab Rides data so we send it to our template to display
+            # no null inputs
+
+            query = "INSERT INTO TouringPlansHasRides (planID, ridetID ) VALUES (%s, %s)"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (planID, rideID ))
+            mysql.connection.commit()
+
+            # redirect back to rides page
+            return redirect("/touring_plans")
+
+    # Grab Rides data so we send it to our template to display
     if request.method == "GET":
         # mySQL query to grab a Single Touring Plan
 
-        query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE rideID = %s" % (rideID)
+        query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE planID = %s" % (planID)
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -586,13 +461,45 @@ def plan_view(planID):
         visitor_data = cur.fetchall()
 
         # mySQL query to grab ride id/name data for our dropdown
-        query3 = "SELECT restaurantID, restaurantName FROM Restaurants;"
+        query4 = "SELECT rideID, rideName FROM Rides;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        restaurant_data = cur.fetchall()
+
+        # render edit_rides page passing our query data and parks data to the edit_rides template
+        return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data, rides=ride_data)
+
+@app.route("/plan_view/<int:planID>", methods=["GET"])
+def plan_view(planID):
+     # Grab Rides data so we send it to our template to display
+    if request.method == "GET":
+        # mySQL query to grab a Single Touring Plan
+
+        query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE planID = %s" % (planID)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        # mySQL query to grab park id/name data for our dropdown
+        query2 = "SELECT parkID, parkName FROM Parks;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        parks_data = cur.fetchall()
+
+        # mySQL query to grab visitor id/name data for our dropdown
+        query3 = "SELECT visitorID, visitorName FROM Visitors;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        visitor_data = cur.fetchall()
+
+        # mySQL query to grab ride id/name data for our dropdown
+        query4 = "SELECT restaurantID, restaurantName FROM Restaurants;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
         restaurant_data = cur.fetchall()
 
         # mySQL query to grab ride id/name data for our dropdown
-        query3 = "SELECT restaurantID FROM TouringPlansHasRestaurants;"
+        query5 = "SELECT * FROM TouringPlansHasRestaurants WHERE RestaurantsRestaurantID = restaurantID;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
         restaurant_plan_data = cur.fetchall()

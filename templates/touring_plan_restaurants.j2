@@ -5,6 +5,38 @@
 	<title>Touring Plans Restaurants</title>
 	<link href="style.css" rel="stylesheet" type="text/css" />
 	<script language="JavaScript">
+		function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
 	
 	function newTouringPlanRestaurant() {
 		showform('insert');
@@ -32,7 +64,7 @@
 			    <thead>
 				    <tr>
 					    <!-- Iterate through each key in the first entry to get the column name -->
-                        {% for key in data[0].keys() %}
+                        {% for key in restaurants[0].keys() %}
 					    
                         <!-- Create a <th> tag with the key inside of it, this will be our header row -->
 					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
@@ -51,7 +83,7 @@
 						    <td> {{item[key]}} </td> 
                             {% endfor %}
 
-                            <!-- Create pages for M:N relationships -->
+    
 
 					    </tr> 
                         {% endfor %} 
@@ -61,45 +93,19 @@
 	</div>	<!-- browse -->
 
 	<div id="insert">
-		<!-- form to INSERT new data into TouringPlansRestaurants-->
-		<form id="insertTouringPlanRestaurant" action="/touring_plans_restaurants" method="post">
-			<legend><strong>Add Touring Plan</strong></legend>
+		<!-- form to INSERT new data into Restaurants-->
+		<form id="insertTouringPlanRestaurant" action="/touring_plan_restaurants" method="post">
+			<legend><strong>Add Restaurant</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="planName">Plan name:</label>
-				<input type="text" class="form-control" id="planName" name="planName" placeholder="" required>
+				<label for="restaurantName">Restaurant name:</label>
+				<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="" required>
 
-				<label for="visitDate">Visit Date:</label>
-                <input type="date" class="form-control" id="visitDate">
 
-				<label for="park">park:</label>
-				<select class="form-control" id="park" name="park" placeholder="" required>
-				<!-- these are hard coded, but you can add code to make this dynamic -->
-					<option value="0">&nbsp;</option>
-					<option value="1">Magic Kingdom</option>
-					<option value="2">Animal Kingdom</option>
-					<option value="3">Epcot</option>
-					<option value="3">Disney's Hollywood Studios</option>
-					<option value="{{parks[0].parkID}}" selected></option>
-				</select>
-
-				<label for="visitorName">Visitor Name:</label>
-				<input type="text" class="form-control" id="visitorName" name="visitorName" placeholder="">
-
-                <label for="restaurantName">Restaurant Name:</label>
-                <select class="form-control" id="restaurantName" name="restaurantName" placeholder=""> 
-                        <!-- Access our parks tuple passed from app.py-->
-                        <option value="0">&nbsp;</option>
-                        {% for restaurant in restaurants %}
-                            <option value="{{ restaurant['restaurantID'] }}"> {{restaurant['restaurantName']}}</option> 
-                            
-                        <!-- End of this for loop -->
-                        {% endfor %} 
-                    </select>	
             </fieldset>
 
             <!-- Create 'Add Restaurant' and 'Cancel' buttons -->
-			<input type="submit" value="insertTouringPlanRestaurant" name="insertTouringPlanRestaurant" class="btn btn-primary" style="margin:.5rem;">
+			<input type="submit" value="insertRestaurant" name="insertRestaurant" class="btn btn-primary" style="margin:.5rem;">
 			<input class="btn" type="button" value="Cancel" onClick="browseTouringPlanRestaurants()"> 
         </form>
 	</div><!--insert-->

@@ -58,22 +58,16 @@
                     <label for="rideLength">Ride Length:</label>
                     <input type="text" value="{{data[0].rideLength}}" class="form-control" id="rideLength" name="rideLength" >
                     
-                    <label for="parks">Parks</label>
-                    <select class="form-control" id="parks" name="parks" placeholder=""> 
-                        <!-- Access our parks tuple passed from app.py-->
-                        <option value="0">&nbsp;</option>
-                        {% for park in parks %}
-                                <!-- If the value iterated park matches the value of the park of a ride currently Editing, pre-select that option -->
-                                {% if parks['parkID'] == data[0].parkID %}
-                                    <option value="{{ parks['parkID'] }}" selected> {{parks['parkName']}}</option>
-                                {% else %}
-                                    <option value="{{ parks['parkID'] }}"> {{parks['parkName']}}</option> 
-                                {% endif %}
-
-
-                        <!-- End of this for loop -->
-                        {% endfor %} 
-                    </select>	
+				<label for="parkID">Park:</label>
+				<select class="form-control" id="parkID" name="parkID" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="0">&nbsp;</option>
+					<option value="1">Magic Kingdom</option>
+					<option value="2">Animal Kingdom</option>
+					<option value="3">Epcot</option>
+					<option value="3">Disney's Hollywood Studios</option>
+					<option value="{{parks[0].parkID}}" selected></option>
+				</select>
                         
                 
                 </fieldset>

@@ -38,7 +38,7 @@
         </table>
 
         <div id="edit">
-            <!-- form to edit data in bsg_people-->
+            <!-- form to edit data in restaurants-->
             <form id="edit_restaurants" action="/edit_restaurants/{{data[0].restaurantID}}" method="post">
                 <legend><strong>Edit Restaurant</strong></legend>
                 <fieldset>
@@ -55,22 +55,19 @@
                     <label for="reservationsAccepted">Reservations Accepted:</label>
                     <input type="text" value="{{data[0].reservationsAccepted}}" class="form-control" id="reservationsAccepted" name="reservationsAccepted">
                     
-                    <label for="parks">Parks</label>
-                    <select class="form-control" id="parks" name="parks" placeholder=""> 
+                    <label for="parkID">Parks</label>
+                    <select class="form-control" id="parkID" name="parkID" placeholder=""> 
                         <!-- Access our parks tuple passed from app.py-->
-                        <option value="0">&nbsp;</option>
-                        {% for park in parks %}
-                                <!-- If the value iterated park matches the value of the park of a ride currently Editing, pre-select that option -->
-                                {% if parks['parkID'] == data[0].parkID %}
-                                    <option value="{{ parks['parkID'] }}" selected> {{parks['parkName']}}</option>
-                                {% else %}
-                                    <option value="{{ parks['parkID'] }}"> {{parks['parkName']}}</option> 
-                                {% endif %}
+                        
+					<option value="0">&nbsp;</option>
+					<option value="1">Magic Kingdom</option>
+					<option value="2">Animal Kingdom</option>
+					<option value="3">Epcot</option>
+					<option value="3">Disney's Hollywood Studios</option>
+					
+				    </select>    
 
-
-                        <!-- End of this for loop -->
-                        {% endfor %} 
-                    </select>	
+            
                         
                 
                 </fieldset>
