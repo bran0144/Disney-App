@@ -83,8 +83,8 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    {# <td><a href="edit_ride/{{item.rideID}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_ride/{{item.rideID}}" class="btn btn-default">Delete</a></td> #}
+						    {# <td><a href="edit_ride/{{item.restaurantID}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_ride/{{item.restaurantID}}" class="btn btn-default">Delete</a></td> #}
 
 					    </tr> 
                         {% endfor %} 
@@ -100,28 +100,29 @@
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
 				<label for="restaurantName">Restaurant name:</label>
-				<input type="text" class="form-control" id="restaurantName" name="restaurantName" pattern="[A-Za-z]{1,}" placeholder="" required>
+				<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="" required>
 
 				<label for="reservationsAccepted">Reservations accepted:</label>
 				<select class="form-control" id="reservationsAccepted" name="reservationsAccepted" placeholder="">
 					<option value="1">Yes</option>
-					<option value="2">No</option>
+					<option value="0">No</option>
 				</select>	
 
-				<label for="park">Park:</label>
-				<select class="form-control" id="park" name="park" pattern="[0-4]{1}" placeholder="" required>
+				<label for="parkID">Park:</label>
+				<select class="form-control" id="parkID" name="parkID" placeholder="" required>
 				<!-- these are hard coded, but you can add code to make this dynamic -->
 					<option value="0">&nbsp;</option>
 					<option value="1">Magic Kingdom</option>
 					<option value="2">Animal Kingdom</option>
 					<option value="3">Epcot</option>
 					<option value="3">Disney's Hollywood Studios</option>
+					<option value="{{parks[0].parkID}}" selected></option>
 				</select>
 
 				<label for="characterDining">Character Dining:</label>
 				<select class="form-control" id="characterDining" name="characterDining" placeholder="">
 					<option value="1">Yes</option>
-					<option value="2">No</option>
+					<option value="0">No</option>
 				</select>	
 
             </fieldset>

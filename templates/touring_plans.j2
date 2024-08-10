@@ -102,26 +102,24 @@
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
 				<label for="planName">Plan name:</label>
-				<input type="text" class="form-control" id="planName" name="planName" pattern="[A-Za-z]{1,}" placeholder="" required>
+				<input type="text" class="form-control" id="planName" name="planName" placeholder="" required>
 
 				<label for="visitDate">Visit Date:</label>
                 <input type="date" class="form-control" id="visitDate">
 
 				<label for="park">park:</label>
-				<select class="form-control" id="park" name="park" pattern="[0-4]{1}" placeholder="" required>
+				<select class="form-control" id="park" name="park" placeholder="" required>
 				<!-- these are hard coded, but you can add code to make this dynamic -->
 					<option value="0">&nbsp;</option>
 					<option value="1">Magic Kingdom</option>
 					<option value="2">Animal Kingdom</option>
 					<option value="3">Epcot</option>
 					<option value="3">Disney's Hollywood Studios</option>
+					<option value="{{parks[0].parkID}}" selected></option>
 				</select>
 
 				<label for="visitorName">Visitor Name:</label>
-				<select class="form-control" id="visitorName" name="visitorName" placeholder="">
-
-                    {# TODO: need to make this dynamic search for name #}
-				</select>	
+				<input type="text" class="form-control" id="visitorName" name="visitorName" placeholder="">
 
             </fieldset>
 
