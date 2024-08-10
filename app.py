@@ -9,6 +9,7 @@ from flask import request
 # We updated the code to match our columns and added routes for out M:N relationships
 # between Touring Plans and Restaurants and Touring Plans and Rides.  
 
+# Original work: We added pages for our M:N relationship to display in a separate Plan View
 
 
 # Configuration
@@ -80,7 +81,7 @@ def delete_ride(rideID):
     # mySQL query to delete the ride with our passed id
     query = "DELETE FROM Rides WHERE rideID = '%s';"
     cur = mysql.connection.cursor()
-    cur.execute(query, (rideID))
+    cur.execute(query, (rideID,))
     mysql.connection.commit()
 
     # redirect back to people page
@@ -120,7 +121,7 @@ def edit_rides(rideID):
             rideLength = request.form["rideLength"]
 
      
-            query = "UPDATE Rides SET rideName= %s, parkID = %s, lightningLane = %s, heightRestriction = %s rideLength = %s WHERE rideID = %s"
+            query = "UPDATE Rides SET rideName= %s, parkID = %s, lightningLane = %s, heightRestriction = %s, rideLength = %s WHERE rideID = %s"
             cur = mysql.connection.cursor()
             cur.execute(query, (rideName, parkID, lightningLane, heightRestriction, rideLength, rideID))
             mysql.connection.commit()
@@ -416,8 +417,14 @@ def touring_plan_restaurants(planID):
         cur.execute(query3)
         restaurant_data = cur.fetchall()
 
+        # mySQL query to grab ride id/name data for our dropdown
+        query5 = "SELECT TouringPlansplanID, RestaurantsrestaurantID FROM TouringPlansHasRestaurants;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        restaurant_plan_data = cur.fetchall()
+
         # render edit_rides page passing our query data and parks data to the edit_rides template
-        return render_template("touring_plan_restaurants.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data)
+        return render_template("touring_plan_restaurants.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data, restaurant_plan=restaurant_plan_data)
 
 @app.route("/touring_plan_rides/<int:planID>", methods=["POST", "GET"])
 def touring_plan_rides(planID):
