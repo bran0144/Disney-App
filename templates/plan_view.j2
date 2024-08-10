@@ -1,0 +1,57 @@
+<html>
+<!-- Adapted from the people.html UI design -->
+<head>
+	<title>Touring Plan</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	
+	function viewTouringPlan() {
+		showform('browse');
+	}
+
+	</script>
+</head>
+
+<body onload="viewTouringPlan()">
+	<h1>Touring Plan</h1> 
+	[ <a href=" {{ url_for('home')}}">Home</a> |<a href=" {{ url_for('parks')}}">Parks</a> | <a href=" {{ url_for('rides')}}">Rides</a> | <a href=" {{ url_for('restaurants')}}">Restaurants</a> | <a href=" {{ url_for('visitors')}}">Visitors</a> | <a href=" {{ url_for('touring_plans')}}">Touring Plans</a> ]
+
+	<div id="browse">
+
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+           
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+	
+
+</body>
+</html>

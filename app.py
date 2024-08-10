@@ -511,8 +511,8 @@ def touring_plans():
         # render edit_rides page passing our query data and parks data to the edit_rides template
         return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data)
 
-@app.route("/touring_plans_restaurants<int:rideID>", methods=["POST", "GET"])
-def touring_plans_restaurant(rideID):
+@app.route("/touring_plans_restaurants<int:planID>", methods=["POST", "GET"])
+def touring_plans_restaurant(planID):
     
     if request.method == "POST":
         # fire off if user presses the Add Person button
@@ -535,7 +535,7 @@ def touring_plans_restaurant(rideID):
     if request.method == "GET":
         # mySQL query to grab a Single Touring Plan
 
-        query = "SELECT visitDate, planName, Parks.parkName AS park, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE rideID = %s" % (rideID)
+        query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE planID = %s" % (planID)
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -562,6 +562,43 @@ def touring_plans_restaurant(rideID):
         return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data)
 
 
+@app.route("/plan_view<int:planID>", methods=["GET"])
+def plan_view(planID):
+     # Grab Rides data so we send it to our template to display
+    if request.method == "GET":
+        # mySQL query to grab a Single Touring Plan
+
+        query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE rideID = %s" % (rideID)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        # mySQL query to grab park id/name data for our dropdown
+        query2 = "SELECT parkID, parkName FROM Parks;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        parks_data = cur.fetchall()
+
+        # mySQL query to grab visitor id/name data for our dropdown
+        query3 = "SELECT visitorID, visitorName FROM Visitors;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        visitor_data = cur.fetchall()
+
+        # mySQL query to grab ride id/name data for our dropdown
+        query3 = "SELECT restaurantID, restaurantName FROM Restaurants;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        restaurant_data = cur.fetchall()
+
+        # mySQL query to grab ride id/name data for our dropdown
+        query3 = "SELECT restaurantID FROM TouringPlansHasRestaurants;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        restaurant_plan_data = cur.fetchall()
+
+
+    return render_template("plan_view.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data, restaurant_plans=restaurant_plan_data)
 # Listener
 
 if __name__ == "__main__":
