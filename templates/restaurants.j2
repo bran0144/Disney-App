@@ -83,8 +83,9 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    {# <td><a href="edit_ride/{{item.restaurantID}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_ride/{{item.restaurantID}}" class="btn btn-default">Delete</a></td> #}
+						  
+						    <td><a href="edit_restaurants/{{item.restaurantID}}" class="btn btn-default">Edit</a></td>
+						
 
 					    </tr> 
                         {% endfor %} 
@@ -132,7 +133,36 @@
 			<input class="btn" type="button" value="Cancel" onClick="browseRestaurants()"> 
         </form>
 	</div><!--insert-->
-	
+	<div id="edit">
+		<!-- form to edit data in Rides-->
+		<form id="edit_restaurants" action="/edit_restaurants/{{data[0].restaurantID}}" method="post">
+			<legend><strong>Edit Ride</strong></legend>
+			<fieldset>
+				<input type="hidden" value="{{data[0].restaurantID}}" class="form-control" id="restaurantID" name="restaurantID" required>
+				<label for="restaurantName">Ride name:</label>
+
+				<input type="text" class="form-control" id="restaurantName" name="restaurantName" placeholder="{{data[0].restaurantName}}" required>
+				<label for="characterDining">Height restriction:</label>
+
+				<input type="text" class="form-control" id="characterDining" name="characterDining"  placeholder="{{data[0].characterDining}}">
+				<label for="parkID">Park:</label>
+
+				<select class="form-control" id="parkID" name="parkID"  placeholder="" required>
+					<option value="0">&nbsp;</option>
+					<option value="1">Magic Kingdom</option>
+					<option value="2">Animal Kingdom</option>
+					<option value="3">Epcot</option>
+					<option value="4">Disney's Hollywood Studios</option>
+					<option value="{{parks[0].parkID}}" selected></option>
+				</select>
+
+				<label for="reservationsAccepted">Reservations Accepted:</label>
+				<input type="text" class="form-control" id="reservationsAccepted" name="reservationsAccepted"  placeholder="{{data[0].reservationsAccepted}}"> 
+								
+				</fieldset>
+				<input class="btn" type="button" value="Cancel" onClick="browseRestaurants()" style="margin:.5rem;"> 
+        </form>
+	</div><!--edit-->
 
 </body>
 </html>
