@@ -1,5 +1,19 @@
 <html>
-<!-- Adapted from the people.html UI design -->
+
+{# Our app.py code borrowed significantly from the flask starter app code
+https://github.com/osu-cs340-ecampus/flask-starter-app
+We used the skeleton code for connecting to the db and used the same style for routing and templates.
+We updated the code to match our columns and added routes for out M:N relationships
+between Touring Plans and Restaurants and Touring Plans and Rides. We followed a similar pattern
+for add/delete/update/get operations for each of our tables the routing and templating. 
+
+We also used the course materials in the Explorations to add route 
+handling capabilities, and to use gunicorn.
+Source URL: https://canvas.oregonstate.edu/courses/1967354/pages/exploration-developing-in-flask?module_item_id=24460849
+
+Original work: We added pages for our M:N relationship to display in a separate Plan View. #}
+
+
 <head>
 	<title>Rides</title>
 	<link href="style.css" rel="stylesheet" type="text/css" />
@@ -135,42 +149,26 @@
             </fieldset>
 
             <!-- Create 'Add Ride' and 'Cancel' buttons -->
-			<input type="submit" value="insertRide" name="insertRide" class="btn btn-primary" style="margin:.5rem;">
+			<input type="submit" value="Add" name="insertRide" class="btn btn-primary" style="margin:.5rem;">
 			<input class="btn" type="button" value="Cancel" onClick="browseRides()"> 
         </form>
 	</div><!--insert-->
-	<div id="edit">
-		<!-- form to edit data in Rides-->
-		<form id="edit_rides" action="/edit_rides/{{data[0].rideID}}" method="post">
-			<legend><strong>Edit Ride</strong></legend>
-			<fieldset>
-				<input type="hidden" value="{{data[0].rideID}}" class="form-control" id="rideID" name="rideID" required>
-				<label for="rideName">Ride name:</label>
 
-				<input type="text" class="form-control" id="rideName" name="rideName" placeholder="{{data[0].rideName}}" required>
-				<label for="heightRestriction">Height restriction:</label>
-
-				<input type="text" class="form-control" id="heightRestriction" name="heightRestriction"  placeholder="{{data[0].heightRestriction}}">
-				<label for="parkID">Park:</label>
-
-				<select class="form-control" id="parkID" name="parkID"  placeholder="" required>
-					<option value="0">&nbsp;</option>
-					<option value="1">Magic Kingdom</option>
-					<option value="2">Animal Kingdom</option>
-					<option value="3">Epcot</option>
-					<option value="4">Disney's Hollywood Studios</option>
-					<option value="{{parks[0].parkID}}" selected></option>
-				</select>
-
-				<label for="lightningLane">Lightning lane:</label>
-				<input type="text" class="form-control" id="lightningLane" name="lightningLane"  placeholder="{{data[0].lightningLane}}"> 
-				
-				<label for="rideLength">Ride length:</label>
-				<input type="text" class="form-control" id="rideLength" name="rideLength" placeholder="{{data[0].rideLength}}"> 
-				
-				</fieldset>
-				<input class="btn" type="button" value="Cancel" onClick="browseRides()" style="margin:.5rem;"> 
-        </form>
-	</div><!--edit-->
+	</div>
+            <p>&nbsp;</p>
+            <div id="deleteRide" style="display: block">
+                <form method="POST" id="deleteRide">
+                    <legend><strong>Delete Ride</strong></legend>
+                        <fieldset class="fields">
+                        <p>Are you sure you wish to delete the following?</p>
+                        <input type="hidden" name="rideID" id="deleterideID" value="1">
+                        <label><strong>Ride ID:</strong></label> 1
+                          <label> <strong>Ride Name</strong> </label> 
+                        </fieldset>
+                  <input class="btn" type="submit" id="deleteRide" value="Delete">
+                        <input class="btn" type="button" value="cancel" onClick="browsePatients()">
+                </form> 
+              </div><!-- delete -->
+	
 </body>
 </html>
