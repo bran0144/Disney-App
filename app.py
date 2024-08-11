@@ -17,13 +17,13 @@ from flask import request
 # Original work: We added pages for our M:N relationship to display in a separate Plan View.
 
 
-# Configuration
+# Configuration and DB setup
 
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_gottk'
-app.config['MYSQL_PASSWORD'] = '6459' #last 4 of onid
+app.config['MYSQL_PASSWORD'] = '' #last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_gottk'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
@@ -33,6 +33,7 @@ mysql = MySQL(app)
 
 # Routes 
 
+# Home page with table descriptions
 @app.route("/")
 def home():
     return render_template("main.j2")
@@ -41,10 +42,10 @@ def home():
 # route for rides page
 @app.route("/rides", methods=["POST", "GET"])
 def rides():
-    # Separate out the request methods, in this case this is for a POST
-    # insert a person into the bsg_people entity
+
+    # insert a ride into Rides table
     if request.method == "POST":
-        # fire off if user presses the Add Person button
+        # fire off if user presses the Add Ride button
         if request.form.get("insertRide"):
             # grab user form inputs
             rideName = request.form["rideName"]
@@ -80,7 +81,7 @@ def rides():
         return render_template("rides.j2", data=data, parks=parks_data)
 
 # route for delete functionality, deleting a ride from Rides,
-# we want to pass the 'id' value of that ride on button click (see HTML) via the route
+# we want to pass the 'rideID' value of that ride on button click (see HTML) via the route
 @app.route("/delete_ride/<int:rideID>")
 def delete_ride(rideID):
     # mySQL query to delete the ride with our passed id
@@ -94,7 +95,7 @@ def delete_ride(rideID):
 
 
 # route for edit functionality, updating the attributes of a ride in Rides
-# similar to our delete route, we want to the pass the 'id' value of that ride on button click (see HTML) via the route
+# similar to our delete route, we want to the pass the 'rideID' value of that ride on button click (see HTML) via the route
 @app.route("/edit_rides/<int:rideID>", methods=["POST", "GET"])
 def edit_rides(rideID):
     if request.method == "GET":
@@ -137,10 +138,10 @@ def edit_rides(rideID):
 # route for parks page
 @app.route("/parks", methods=["POST", "GET"])
 def parks():
-    # Separate out the request methods, in this case this is for a POST
-    # insert a person into the bsg_people entity
+
+    # insert a park into Parks
     if request.method == "POST":
-        # fire off if user presses the Add Person button
+        # fire off if user presses the Add Park button
         if request.form.get("insertPark"):
             # grab user form inputs
             parkName = request.form["parkName"]
@@ -170,7 +171,7 @@ def parks():
 # route for parks page
 @app.route("/restaurants", methods=["POST", "GET"])
 def restaurants():
-    # Separate out the request methods, in this case this is for a POST
+
     # insert a Restaurant into the Restaurant entity
     if request.method == "POST":
         # fire off if user presses the Add Restaurant button
@@ -212,7 +213,7 @@ def restaurants():
 @app.route("/edit_restaurants/<int:restaurantID>", methods=["POST", "GET"])
 def edit_restaurants(restaurantID):
     if request.method == "GET":
-        # mySQL query to grab the info of the person with our passed id
+        # mySQL query to grab the info of the restaurant with our passed id
         query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
         cur = mysql.connection.cursor()
         cur.execute(query)
@@ -249,10 +250,10 @@ def edit_restaurants(restaurantID):
             return redirect("/restaurants")
 
 
-# route for parks page
+# route for Visitors page
 @app.route("/visitors", methods=["POST", "GET"])
 def visitors():
-    # Separate out the request methods, in this case this is for a POST
+
     # insert a visitor into the Visitor entity
     if request.method == "POST":
         # fire off if user presses the Add Visitor button
@@ -302,16 +303,16 @@ def visitors():
         cur.execute(query)
         data = cur.fetchall()
 
-        # render parks page
+        # render visitors page
         return render_template("visitors.j2", data=data)
 
 # route for rides page
 @app.route("/touring_plans", methods=["POST", "GET"])
 def touring_plans():
-    # Separate out the request methods, in this case this is for a POST
-    # insert a person into the bsg_people entity
+
+    # insert a plan into the TouringPlans table
     if request.method == "POST":
-        # fire off if user presses the Add Person button
+        # fire off if user presses the Add Touring Plan button
         if request.form.get("insertTouringPlan"):
             # grab user form inputs
             planName = request.form["planName"]
@@ -349,13 +350,13 @@ def touring_plans():
                 cur.execute(query, (parkID, visitorID, visitDate, planName ))
                 mysql.connection.commit()
 
-            # redirect back to rides page
+            # redirect back to touring_plans page
             return redirect("/touring_plans")
 
-    # Grab Rides data so we send it to our template to display
+    # Grab Touring PLans data so we send it to our template to display
     if request.method == "GET":
-        # mySQL query to grab all the rides in Rides
 
+        # mySQL query to grab all the plans in TouringPlans
         query = "SELECT planID, visitDate, planName, Parks.parkName AS park, Visitors.visitorName AS visitorName FROM TouringPlans LEFT JOIN Parks ON TouringPlans.parkID = Parks.parkID LEFT JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID;"
         cur = mysql.connection.cursor()
         cur.execute(query)
@@ -367,39 +368,39 @@ def touring_plans():
         cur.execute(query2)
         parks_data = cur.fetchall()
 
-        # mySQL query to grab ride id/name data for our dropdown
+        # mySQL query to grab visitor id/name data for our dropdown
         query3 = "SELECT visitorID, visitorName FROM Visitors;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
         visitor_data = cur.fetchall()
 
-        # render edit_rides page passing our query data and parks data to the edit_rides template
+        # render touring_plans page passing our query data, parks data, and visitors data to the touring_plans template
         return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data)
 
+# route to get and add restaurants to the TouringPlan
 @app.route("/touring_plan_restaurants/<int:planID>", methods=["POST", "GET"])
 def touring_plan_restaurants(planID):
     
     if request.method == "POST":
-        # fire off if user presses the Add Person button
+        # fire off if user presses the Add Restaurant button
         if request.form.get("insertTouringPlanRestaurant"):
             # grab user form inputs
             planID = request.form["planID"]
             restaurantID = request.form["restaurantID"]
 
-            # no null inputs
 
             query = "INSERT INTO TouringPlansHasRestaurants (TouringPlansplanID, RestaurantsrestaurantID ) VALUES (%s, %s)"
             cur = mysql.connection.cursor()
             cur.execute(query, (planID, restaurantID ))
             mysql.connection.commit()
 
-            # redirect back to rides page
+            # redirect back to touring_plans page
             return redirect("/touring_plans")
 
-    # Grab Rides data so we send it to our template to display
+    # Grab Touring Plans data so we send it to our template to display
     if request.method == "GET":
-        # mySQL query to grab a Single Touring Plan
 
+        # mySQL query to grab a Single Touring Plan
         query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE planID = %s" % (planID)
         cur = mysql.connection.cursor()
         cur.execute(query)
@@ -417,45 +418,45 @@ def touring_plan_restaurants(planID):
         cur.execute(query3)
         visitor_data = cur.fetchall()
 
-        # mySQL query to grab ride id/name data for our dropdown
+        # mySQL query to grab restaurant id/name data for our dropdown
         query4 = "SELECT restaurantID, restaurantName FROM Restaurants;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
         restaurant_data = cur.fetchall()
 
-        # mySQL query to grab ride id/name data for our dropdown
+        # mySQL query to grab M:N for our dropdown
         query5 = "SELECT TouringPlansplanID, RestaurantsrestaurantID FROM TouringPlansHasRestaurants;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
         restaurant_plan_data = cur.fetchall()
 
-        # render edit_rides page passing our query data and parks data to the edit_rides template
+        # render touring_plan_restaurants page passing our query data and parks data to the edit_rides template
         return render_template("touring_plan_restaurants.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data, restaurant_plan=restaurant_plan_data)
 
+# route to get and add rides to the TouringPlan
 @app.route("/touring_plan_rides/<int:planID>", methods=["POST", "GET"])
 def touring_plan_rides(planID):
     
     if request.method == "POST":
-        # fire off if user presses the Add Person button
+
+        # fire off if user presses the Add Ride button
         if request.form.get("insertTouringPlanRide"):
             # grab user form inputs
             planID = request.form["planID"]
             rideID = request.form["rideID"]
-
-            # no null inputs
 
             query = "INSERT INTO TouringPlansHasRides (planID, ridetID ) VALUES (%s, %s)"
             cur = mysql.connection.cursor()
             cur.execute(query, (planID, rideID ))
             mysql.connection.commit()
 
-            # redirect back to rides page
+            # redirect back to touring_plans page
             return redirect("/touring_plans")
 
-    # Grab Rides data so we send it to our template to display
+    # Grab Touring Plans data so we send it to our template to display
     if request.method == "GET":
-        # mySQL query to grab a Single Touring Plan
 
+        # mySQL query to grab a Single Touring Plan
         query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE planID = %s" % (planID)
         cur = mysql.connection.cursor()
         cur.execute(query)
@@ -477,17 +478,19 @@ def touring_plan_rides(planID):
         query4 = "SELECT rideID, rideName FROM Rides;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
-        restaurant_data = cur.fetchall()
+        ride_data = cur.fetchall()
 
         # render edit_rides page passing our query data and parks data to the edit_rides template
         return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data, rides=ride_data)
 
+# route to display a single Touring Plan with all restaurants and rides chosen for that Touring Plan
 @app.route("/plan_view/<int:planID>", methods=["GET"])
 def plan_view(planID):
-     # Grab Rides data so we send it to our template to display
-    if request.method == "GET":
-        # mySQL query to grab a Single Touring Plan
 
+     # Grab TouringPlan data so we send it to our template to display
+    if request.method == "GET":
+
+        # mySQL query to grab a Single Touring Plan
         query = "SELECT visitDate, planName, Parks.parkName AS parkName, Visitors.visitorName AS visitorName FROM TouringPlans INNER JOIN Parks ON TouringPlans.parkID = Parks.parkID INNER JOIN Visitors on TouringPlans.visitorID = Visitors.visitorID WHERE planID = %s" % (planID)
         cur = mysql.connection.cursor()
         cur.execute(query)
@@ -505,20 +508,20 @@ def plan_view(planID):
         cur.execute(query3)
         visitor_data = cur.fetchall()
 
-        # mySQL query to grab ride id/name data for our dropdown
+        # mySQL query to grab restaurant id/name data for our dropdown
         query4 = "SELECT restaurantID, restaurantName FROM Restaurants;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
-        restaurant_data = cur.fetchall()
+        ride_data = cur.fetchall()
 
         # mySQL query to grab ride id/name data for our dropdown
         query5 = "SELECT * FROM TouringPlansHasRestaurants WHERE RestaurantsRestaurantID = restaurantID;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
-        restaurant_plan_data = cur.fetchall()
+        ride_plan_data = cur.fetchall()
 
 
-    return render_template("plan_view.j2", data=data, parks=parks_data, visitors=visitor_data, restaurants=restaurant_data, restaurant_plans=restaurant_plan_data)
+    return render_template("plan_view.j2", data=data, parks=parks_data, visitors=visitor_data, rides=ride_data, ride_plans=ride_plan_data)
 # Listener
 
 if __name__ == "__main__":
