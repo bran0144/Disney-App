@@ -3,16 +3,14 @@ from flask_mysqldb import MySQL
 from flask import request
 
 
-# Our app.py code borrowed significantly from the flask starter app code
-# https://github.com/osu-cs340-ecampus/flask-starter-app
+# Our app.py code borrowed significantly from the flask starter app code https://github.com/osu-cs340-ecampus/flask-starter-app
 
-# We updated the code to match our columns and added routes for out M:N relationships
-# between Touring Plans and Restaurants and Touring Plans and Rides.  
+# We updated the code to match our columns and added routes for out M:N relationships between Touring Plans and Restaurants and Touring Plans and Rides.  
 
-# Original work: We added pages for our M:N relationship to display in a separate Plan View
+# Original work: We added pages for our M:N relationship to display in a separate plan_view.j2. Some of the code within plan_view.j2 comes from the above flask-starter-app.
 
 
-# Configuration
+# Configurations
 
 app = Flask(__name__)
 
@@ -471,7 +469,7 @@ def touring_plan_rides(planID):
         query4 = "SELECT rideID, rideName FROM Rides;"
         cur = mysql.connection.cursor()
         cur.execute(query3)
-        restaurant_data = cur.fetchall()
+        ride_data = cur.fetchall()
 
         # render edit_rides page passing our query data and parks data to the edit_rides template
         return render_template("touring_plans.j2", data=data, parks=parks_data, visitors=visitor_data, rides=ride_data)

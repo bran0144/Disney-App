@@ -50,25 +50,24 @@
                     <input type="text" value="{{data[0].restaurantName}}" class="form-control" id="restaurantName" name="restaurantName" required>
                     
                     <label for="characterDining">Character Dining:</label>
-                    <input type="text" value="{{data[0].characterDining}}" class="form-control" id="characterDining" name="characterDining" >
+                  	<select class="form-control" id="characterDining" name="characterDining" placeholder="">
+					<option value="1">Yes</option>
+					<option value="0">No</option>
+				    </select>	
                     
                     <label for="reservationsAccepted">Reservations Accepted:</label>
-                    <input type="text" value="{{data[0].reservationsAccepted}}" class="form-control" id="reservationsAccepted" name="reservationsAccepted">
-                    
-                    <label for="parkID">Parks</label>
-                    <select class="form-control" id="parkID" name="parkID" placeholder=""> 
-                        <!-- Access our parks tuple passed from app.py-->
-                        
-					<option value="0">&nbsp;</option>
-					<option value="1">Magic Kingdom</option>
-					<option value="2">Animal Kingdom</option>
-					<option value="3">Epcot</option>
-					<option value="3">Disney's Hollywood Studios</option>
-					
-				    </select>    
+				    <select class="form-control" id="reservationsAccepted" name="reservationsAccepted" placeholder="">
+					<option value="1">Yes</option>
+					<option value="0">No</option>
+				    </select>	
 
-            
-                        
+                    <label for="parkID">Parks:</label>
+                    <select class="form-control" id="parkID" name="parkID" placeholder="" value="" required><br>
+                        {% for item in parks %}
+                        <option {% if item['parkID'] == data[0]['parkID'] %} selected {% endif %}value="{{item['parkID']}}">{{item['parkName']}}</option>
+                        {% endfor %}
+                    </select> <br>
+                     
                 
                 </fieldset>
                 <input type="submit" value="edit_restaurants" name="edit_restaurants" class="btn btn-primary" style="margin:.5rem;">
